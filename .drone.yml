@@ -8,6 +8,7 @@ steps:
     when:
       event: pull_request
     commands:
+      - cd united-ticket-system-frontend
       - yarn install
 
   - name: build
@@ -17,6 +18,7 @@ steps:
     depends_on:
       - setup
     commands:
+      - cd united-ticket-system-frontend
       - yarn build
 
   - name: prettier
@@ -26,6 +28,7 @@ steps:
     depends_on:
       - setup
     commands:
+      - cd united-ticket-system-frontend
       - yarn lint:prettier
 
   - name: lint
@@ -35,4 +38,5 @@ steps:
     depends_on:
       - setup
     commands:
+      - cd united-ticket-system-frontend
       - yarn lint
