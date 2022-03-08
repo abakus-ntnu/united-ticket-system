@@ -3,40 +3,78 @@ kind: pipeline
 name: default
 
 steps:
-  - name: setup
+  - name: setup-frontend
     image: node:14-alpine
     when:
       event: pull_request
     commands:
-      - cd united-ticket-system-frontend
+      - cd frontend
       - yarn install
 
-  - name: build
+  - name: build-frontend
     image: node:14-alpine
     when:
       event: pull_request
     depends_on:
-      - setup
+      - setup-frontend
     commands:
-      - cd united-ticket-system-frontend
+      - cd frontend
       - yarn build
 
-  - name: prettier
+  - name: prettier-frontend
     image: node:14-alpine
     when:
       event: pull_request
     depends_on:
-      - setup
+      - setup-frontend
     commands:
-      - cd united-ticket-system-frontend
+      - cd frontend
       - yarn lint:prettier
 
-  - name: lint
+  - name: lint-frontend
     image: node:14-alpine
     when:
       event: pull_request
     depends_on:
-      - setup
+      - setup-frontend
     commands:
-      - cd united-ticket-system-frontend
+      - cd frontend
+      - yarn lint
+
+  - name: setup-api
+    image: node:14-alpine
+    when:
+      event: pull_request
+    commands:
+      - cd api
+      - yarn install
+
+  - name: build-api
+    image: node:14-alpine
+    when:
+      event: pull_request
+    depends_on:
+      - setup-api
+    commands:
+      - cd api
+      - yarn build
+
+  - name: prettier-api
+    image: node:14-alpine
+    when:
+      event: pull_request
+    depends_on:
+      - setup-api
+    commands:
+      - cd api
+      - yarn lint:prettier
+
+  - name: lint-api
+    image: node:14-alpine
+    when:
+      event: pull_request
+    depends_on:
+      - setup-api
+    commands:
+      - cd api
       - yarn lint
