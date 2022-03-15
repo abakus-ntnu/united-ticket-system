@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Card, Text, Row, Modal, Button } from "@nextui-org/react";
-import { attendantType } from "../types";
+import {CreateAttendantType} from "../../types/types"
 
 const FileUploader = () => {
   const [visible, setVisible] = useState(false);
-  const [attendice, setAttendice] = useState<attendantType[]>([]);
+  const [attendice, setAttendice] = useState<CreateAttendantType[]>([]);
 
   const handleFileUpload = () => {
     console.log("JEG SENDER JSON TIL SERVEREN HER");
@@ -22,14 +22,10 @@ const FileUploader = () => {
         const attendice: String[] = text.split("\n");
         attendice.forEach((attendant) => {
           const attendantData = attendant.split(",");
-          const newAttendant: attendantType = {
+          const newAttendant: CreateAttendantType = {
             name: attendantData[0],
             mail: attendantData[1],
             group: attendantData[2],
-            ticket_sent: false,
-            registered: true,
-            attended: false,
-            foto_consent: false,
           };
           tempAttendice.push(newAttendant);
         });
