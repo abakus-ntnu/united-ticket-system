@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Card, Text, Row, Modal, Button } from "@nextui-org/react";
-import {CreateAttendantType} from "../../types/types"
+import { CreateAttendantType } from "../../types/types";
 
 const FileUploader = () => {
   const [visible, setVisible] = useState(false);
