@@ -25,7 +25,7 @@ const FileUploader = () => {
           const attendantData = attendant.split(",");
           const newAttendant: CreateAttendantType = {
             name: attendantData[0],
-            mail: attendantData[1],
+            email: attendantData[1],
             group: attendantData[2],
           };
           tempAttendice.push(newAttendant);
@@ -93,7 +93,7 @@ const FileUploader = () => {
               {attendice.slice(0, 3).map((attendant, idx) => (
                 <tr key={idx}>
                   <td>{attendant["name"]}</td>
-                  <td>{attendant["mail"]}</td>
+                  <td>{attendant["email"]}</td>
                   <td>{attendant["group"]}</td>
                 </tr>
               ))}
