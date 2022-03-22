@@ -1,6 +1,8 @@
 import express from "express";
 import jwt from "express-jwt";
 import jwks from "jwks-rsa";
+import admin from "./routes/admin";
+import attendee from "./routes/attendee";
 
 const jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
@@ -17,13 +19,8 @@ const jwtCheck = jwt({
 const app = express();
 const port = 8080; // default port to listen
 
-app.get("/authorized", jwtCheck, function (req, res) {
-  res.send("Secured Resource");
-});
-
-app.get("/", (req, res) => {
-  res.send("Hello world!");
-});
+app.use('/admin', admin);
+app.use('/', attendee)
 
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
