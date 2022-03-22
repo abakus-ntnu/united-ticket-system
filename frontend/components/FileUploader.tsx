@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Card, Text, Row, Modal, Button } from "@nextui-org/react";
+import { Card, Text, Row, Modal, Button, Grid } from "@nextui-org/react";
 import { CreateAttendantType } from "../../types/types";
+import { CloudUploadOutline } from "react-ionicons";
 
 const FileUploader = () => {
   const [visible, setVisible] = useState(false);
@@ -14,7 +15,7 @@ const FileUploader = () => {
 
   const onDrop = useCallback((acceptedFiles) => {
     const reader = new FileReader();
-
+     
     reader.onload = function (e) {
       if (typeof e?.target?.result === "string") {
         const tempAttendice: any[] = [];
@@ -53,22 +54,27 @@ const FileUploader = () => {
           clickable
           css={{ mw: "500px" }}
         >
-          <Row justify="space-between">
-            <p>Icon her</p>
-            <Text color="white">
-              Last opp en en csv fil av brukere. (Se formatering)
-            </Text>
-          </Row>
+          <Grid.Container gap={2}>
+            <Grid xs={12} sm={2} justify="center">
+              <CloudUploadOutline color="#ffffff" height="40x" width="40px" />
+            </Grid>
+            <Grid xs={12} sm={10} justify="center" alignItems="center">
+              <Text color="white" css={{textAlign:"center"}}>
+                Last opp en en csv fil med brukere. (Se formatering)
+              </Text>
+            </Grid>
+          </Grid.Container>
         </Card>
       </div>
-      <Modal closeButton blur open={visible} onClose={() => setVisible(false)}>
+      <Modal closeButton blur open={visible} onClose={() => setVisible(false)} style={{margin:"10px"}} >
         <Modal.Header>
           <Text id="Forhåndsvisning" size={18}>
             Forhåndsvisning
           </Text>
         </Modal.Header>
         <Modal.Body>
-          <Text>Antall brukere: {attendice.length}</Text>
+          <Text>Antall brukere gjennkjent: {attendice.length}</Text>
+         <br></br>
           <table>
             <thead>
               <tr>
@@ -78,7 +84,7 @@ const FileUploader = () => {
               </tr>
             </thead>
             <tbody>
-              {attendice.map((attendant, idx) => (
+              {attendice.slice(0, 3).map((attendant, idx) => (
                 <tr key={idx}>
                   <td>{attendant["name"]}</td>
                   <td>{attendant["mail"]}</td>
@@ -87,6 +93,7 @@ const FileUploader = () => {
               ))}
             </tbody>
           </table>
+          <Text css={{textAlign: "center"}}>...</Text>
         </Modal.Body>
         <Modal.Footer>
           <Row justify="space-between">
