@@ -11,15 +11,16 @@
     "lint:prettier": "prettier '**/*.{js,css,md,ts,tsx}' --check"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^1.7.0",
     "@nextui-org/react": "^1.0.2-beta.4",
     "browserify-css": "0.12.0",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-dropzone": "^12.0.4",
     "react-ionicons": "^4.2.0",
     "react-is": "^17.0.2",
-    "styled-components": "^5.3.3",
-    "react-dropzone": "^12.0.4"
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@types/node": "17.0.21",

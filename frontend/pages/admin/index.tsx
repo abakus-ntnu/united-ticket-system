@@ -1,19 +1,14 @@
-import { Row } from "@nextui-org/react";
-import type { NextPage } from "next";
 import AdminNavbar from "../../components/AdminNavbar";
 import FileUploader from "../../components/FileUploader";
-import LoginProvider from "../../components/LoginProvider";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
-const AdminPage: NextPage = () => {
+const AdminPage = withPageAuthRequired(() => {
   return (
-    <LoginProvider>
+    <>
       <AdminNavbar />
       <FileUploader />
-      <Row css={{ height: "100vh" }} justify="center" align="center">
-        Du er logget inn
-      </Row>
-    </LoginProvider>
+    </>
   );
-};
+});
 
 export default AdminPage;
