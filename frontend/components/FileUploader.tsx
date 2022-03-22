@@ -15,7 +15,7 @@ const FileUploader = () => {
 
   const onDrop = useCallback((acceptedFiles) => {
     const reader = new FileReader();
-     
+
     reader.onload = function (e) {
       if (typeof e?.target?.result === "string") {
         const tempAttendice: any[] = [];
@@ -59,14 +59,20 @@ const FileUploader = () => {
               <CloudUploadOutline color="#ffffff" height="40x" width="40px" />
             </Grid>
             <Grid xs={12} sm={10} justify="center" alignItems="center">
-              <Text color="white" css={{textAlign:"center"}}>
+              <Text color="white" css={{ textAlign: "center" }}>
                 Last opp en en csv fil med brukere. (Se formatering)
               </Text>
             </Grid>
           </Grid.Container>
         </Card>
       </div>
-      <Modal closeButton blur open={visible} onClose={() => setVisible(false)} style={{margin:"10px"}} >
+      <Modal
+        closeButton
+        blur
+        open={visible}
+        onClose={() => setVisible(false)}
+        style={{ margin: "10px" }}
+      >
         <Modal.Header>
           <Text id="Forhåndsvisning" size={18}>
             Forhåndsvisning
@@ -74,7 +80,7 @@ const FileUploader = () => {
         </Modal.Header>
         <Modal.Body>
           <Text>Antall brukere gjennkjent: {attendice.length}</Text>
-         <br></br>
+          <br></br>
           <table>
             <thead>
               <tr>
@@ -93,7 +99,7 @@ const FileUploader = () => {
               ))}
             </tbody>
           </table>
-          <Text css={{textAlign: "center"}}>...</Text>
+          <Text css={{ textAlign: "center" }}>...</Text>
         </Modal.Body>
         <Modal.Footer>
           <Row justify="space-between">
