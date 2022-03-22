@@ -6,7 +6,6 @@ const AdminPage = withPageAuthRequired(() => {
     return (
         <>
             <AdminNavbar />
-
             <QRScanner />
         </>
     );

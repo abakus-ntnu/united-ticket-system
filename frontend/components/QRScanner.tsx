@@ -1,16 +1,25 @@
-import { Card, Container, Row, Spacer } from "@nextui-org/react";
+import { Button, Container, Modal, Row, Spacer, Text, useModal } from "@nextui-org/react";
 import React, { useState } from "react";
 import QrReader from 'react-qr-scanner';
 
 const QRScanner: React.FC = () => {
-    const [data, setData] = useState('No result');
+    const [visible, setVisible] = useState(false)
+    const [user, setUser] = useState("No data")
 
-    const handleScan = (result) => {
-      setData(result?.text);
+    const handleScan = (result: any) => {
+      if (result?.text) {
+        setUser(result?.text);
+        setVisible(true)
+      }
     }
   
-    const handleError = (error) => {
+    const handleError = (error: any) => {
       console.log(error);
+    }
+
+    const registerUser = () => {
+      // her sender man request for å regisrerer bruker
+      setVisible(false)
     }
 
   return (
@@ -20,16 +29,33 @@ const QRScanner: React.FC = () => {
         <Spacer y={1} />
         <Row css={{ widht: "100vh" }} justify="center" align="center">
             {(typeof window !== "undefined") &&
-            <QrReader style={{ width: "100vh" }} delay={1000} onScan={handleScan} onError={handleError} />
+              <QrReader style={{ width: "100vh" }} onScan={handleScan} onError={handleError} />
             }
         </Row>
-        <Row css={{ widht: "100vh" }} justify="center" align="center">
-        {data && 
-            <Card css={{ mw: "400px" }} color={"success"}>
-            <p>{data}</p>
-            </Card>
-        }
-        </Row>        
+        <Modal
+        closeButton
+        blur
+        aria-labelledby="modal-title"
+        open={visible}
+        onClose={() => setVisible(false)}
+      >
+        <Modal.Header>
+          <Text id="modal-title" size={18}>   
+            Registrer bruker
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Text css={{textAlign:"center"}} b size={30}>{user}</Text>
+        </Modal.Body>
+        <Modal.Footer css={{justifyContent:"space-between"}}>
+          <Button auto flat color="error" onClick={() => setVisible(false)}>
+            Close
+          </Button>
+          <Button auto onClick={registerUser}>
+            Registrer
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
