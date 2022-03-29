@@ -8,7 +8,7 @@ const AdminPage = withPageAuthRequired(() => {
     <>
       <AdminNavbar />
       <FileUploader />
-      <UserTable/>
+      <UserTable />
     </>
   );
 });
