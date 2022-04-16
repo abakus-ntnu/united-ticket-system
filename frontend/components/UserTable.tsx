@@ -3,8 +3,7 @@ import { VFC } from "react";
 import { CheckmarkOutline, CloseOutline } from "react-ionicons";
 import useSWR from "swr";
 import { AttendantType } from "../../types/types";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import fetchWithToken from "../lib/fetchWithToken";
 
 const BooleanCell: VFC<{ value: boolean }> = (props) => {
   const { theme } = useTheme();
@@ -17,8 +16,8 @@ const BooleanCell: VFC<{ value: boolean }> = (props) => {
 
 const UserTable: VFC = (props) => {
   const { data, error } = useSWR<AttendantType[]>(
-    "https://retoolapi.dev/7uXNmU/data", // TODO: Change this URL
-    fetcher
+    `${process.env.API_URL}/admin/attendees`,
+    fetchWithToken
   );
 
   const columns = ["NAME", "EMAIL", "GROUP", "REGISTERED", "PHOTO CONSENT"];
