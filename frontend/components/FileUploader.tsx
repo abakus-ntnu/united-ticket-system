@@ -3,14 +3,28 @@ import { useDropzone } from "react-dropzone";
 import { Card, Text, Row, Modal, Button, Grid } from "@nextui-org/react";
 import { CreateAttendantType } from "../../types/types";
 import { CloudUploadOutline } from "react-ionicons";
+import fetchWithToken from "../lib/fetchWithToken";
+import { useRouter } from "next/router";
 
 const FileUploader = () => {
+  const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [attendice, setAttendice] = useState<CreateAttendantType[]>([]);
 
-  const handleFileUpload = () => {
-    console.log("JEG SENDER JSON TIL SERVEREN HER");
+  const handleFileUpload = async () => {
+    const response = await fetchWithToken(
+      `${process.env.API_URL}/admin/attendees`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          data: attendice,
+        }),
+      }
+    );
     setVisible(false);
+    if (response.code === 200) {
+      router.reload();
+    }
   };
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -21,6 +35,9 @@ const FileUploader = () => {
         const tempAttendice: any[] = [];
         const text: String = e.target.result;
         const attendice: String[] = text.split("\n");
+        if (attendice.at(-1) === "") {
+          attendice.pop();
+        }
         attendice.forEach((attendant) => {
           const attendantData = attendant.split(",");
           const newAttendant: CreateAttendantType = {
