@@ -11,12 +11,12 @@ datasource db {
 }
 
 model Attendees {
-  id            Int      @id @default(autoincrement())
-  email         String   @unique
-  name          String
-  photo_consent Boolean  @default(false)
-  group         String
-  admitted      DateTime
-  active        Boolean  @default(true)
-  email_sent    Boolean  @default(false)
+  id                     String      @id @default(cuid())
+  email                  String   @unique
+  name                   String
+  photo_consent          Boolean?
+  group                  String
+  admitted               DateTime?
+  active                 Boolean  @default(true)
+  email_sent             Boolean  @default(false)
 }
