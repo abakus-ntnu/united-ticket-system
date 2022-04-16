@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors";
 import jwt from "express-jwt";
 import jwks from "jwks-rsa";
 import admin from "./routes/admin";
@@ -20,6 +21,7 @@ const withAuth = jwt({
 const app = express();
 const port = 8080; // default port to listen
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/admin", withAuth, admin);
