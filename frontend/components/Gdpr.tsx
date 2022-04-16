@@ -15,14 +15,12 @@ const GdprComponent: React.FC = ({ children }) => {
 
   const handleAccept = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log("It worked!");
     setHasAnswered(true);
     //gdpr = true;
   };
 
   const handleDenial = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log("Still workes!");
     setHasAnswered(true);
     //gdpr = false;
   };
@@ -59,7 +57,11 @@ const GdprComponent: React.FC = ({ children }) => {
           <Spacer y={3} />
           <Grid.Container
             gap={2}
-            css={{ display: "flex", justifyContent: "center" }}
+            css={{
+              display: "flex",
+              justifyContent: "center",
+              "@smMax": { flexDirection: "column" },
+            }}
           >
             <Button
               flat
