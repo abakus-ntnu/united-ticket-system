@@ -6,7 +6,7 @@ export type AttendantType = {
   ticket_sent: boolean;
   registered: boolean;
   attended: boolean;
-  foto_consent: boolean;
+  photo_consent: boolean;
   qr: string | null;
 };
 

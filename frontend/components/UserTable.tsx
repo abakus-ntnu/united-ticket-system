@@ -48,7 +48,7 @@ const UserTable: VFC = (props) => {
               <BooleanCell value={user.registered} />
             </Table.Cell>
             <Table.Cell>
-              <BooleanCell value={user.foto_consent} />
+              <BooleanCell value={user.photo_consent} />
             </Table.Cell>
           </Table.Row>
         ))}

@@ -6,7 +6,7 @@ const fetchWithToken = async (input: RequestInfo, init?: RequestInit) => {
     headers: new Headers({
       ...init?.headers,
       Authorization: "Bearer " + token.access_token,
-      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Type": "application/json",
     }),
   }).then((res) => res.json());
 };
