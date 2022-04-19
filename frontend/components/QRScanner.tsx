@@ -1,7 +1,16 @@
-import { Button, Container, Modal, Row, Spacer, Text } from "@nextui-org/react";
+import {
+    Button,
+    Card,
+    Container,
+    Modal,
+    Row,
+    Spacer,
+    Text,
+} from "@nextui-org/react";
 import React, { useState } from "react";
 // @ts-ignore
 import QrReader from "react-qr-scanner";
+import useSWR from "swr";
 import fetchWithToken from "../lib/fetchWithToken";
 
 const QRScanner: React.FC = () => {
@@ -9,6 +18,12 @@ const QRScanner: React.FC = () => {
     const [id, setId] = useState<string | null>(null);
     const [modalMessage, setModalMessage] = useState("No data");
     const [modalColor, setModalColor] = useState("");
+
+    const count = useSWR(
+        `${process.env.API_URL}/admin/attendees/count`,
+        fetchWithToken,
+        { refreshInterval: 5000 }
+    );
 
     const handleScan = async (result: any) => {
         if (id) {
@@ -70,7 +85,7 @@ const QRScanner: React.FC = () => {
     };
 
     return (
-        <Container justify="center">
+        <Container justify="center" display="flex">
             <Spacer y={1} />
             <Row justify="center">
                 <Text css={{ textAlign: "center" }}>
@@ -79,6 +94,30 @@ const QRScanner: React.FC = () => {
                 </Text>
             </Row>
             <Spacer y={1} />
+            {!count.error && count.data ? (
+                <Card
+                    bordered
+                    shadow={false}
+                    css={{
+                        justifyContent: "center",
+                        margin: "10px 0",
+                        flexDirection: "column",
+                        width: "fit-content",
+                    }}
+                >
+                    <Text
+                        css={{ textAlign: "center" }}
+                        weight="bold"
+                        size={"$sm"}
+                    >
+                        Totalt antall registrerte: {count.data.total}
+                    </Text>
+                    <Text css={{ textAlign: "center" }} weight="bold">
+                        Totalt siste 10 minutter: {count.data.last_ten_minutes}
+                    </Text>
+                </Card>
+            ) : null}
+
             <Row css={{ width: "100%" }} justify="center" align="center">
                 <QrReader
                     style={{ width: "100vh" }}

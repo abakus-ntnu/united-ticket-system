@@ -38,6 +38,26 @@ router.post("/attendees", async (req, res) => {
   }
 });
 
+router.get("/attendees/count", async (req, res) => {
+  const total = (await prisma.attendees.count({
+    select: {
+      _all: true,
+      admitted: true,
+    },
+  })).admitted;
+
+  const last_ten_minutes = await prisma.attendees.count({
+    where: {
+      admitted: {
+        gte: new Date(Date.now() - 10 * 60000)
+      }
+    }
+  })
+
+  return res.send({ code: 200, total: total, last_ten_minutes: last_ten_minutes })
+});
+
+
 // Set admitted = NOW()
 router.patch("/attendees/:id/admitted", async (req, res) => {
   const attendeeID = req.params.id;
