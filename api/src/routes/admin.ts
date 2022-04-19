@@ -11,6 +11,7 @@ router.get("/attendees", async (req, res) => {
   try {
     res.send(await prisma.attendees.findMany());
   } catch (error) {
+    console.error(error);
     res.send({ message: "Failed to get attendees", code: 500 });
   }
 });
