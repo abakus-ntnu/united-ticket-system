@@ -8,21 +8,33 @@ import {
   Grid,
   Spacer,
 } from "@nextui-org/react";
+import { responseSymbol } from "next/dist/server/web/spec-compliant/fetch-event";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 const GdprComponent: React.FC = ({ children }) => {
   const [hasAnswered, setHasAnswered] = useState(false);
+  const router = useRouter();
+  const ticketId = router.query.ticketId;
+  const setPhotoConsent = async (consent: boolean) => {
+    const response = await fetch(
+      `${process.env.API_URL}/attendees/${ticketId}/photo_consent/${consent}`,
+      {
+        method: "PATCH",
+      }
+    ).then((response) => response.json());
+  };
 
   const handleAccept = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setHasAnswered(true);
-    //gdpr = true;
+    setPhotoConsent(true);
   };
 
   const handleDenial = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setHasAnswered(true);
-    //gdpr = false;
+    setPhotoConsent(false);
   };
 
   return hasAnswered ? (
