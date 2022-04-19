@@ -24,21 +24,26 @@ const QRScanner: React.FC = () => {
                 }
             ).catch((e) => console.error(e));
 
+            if (!data) {
+                setModalMessage("No data");
+                setModalColor("$red100");
+            }
+
             switch (data.code) {
                 case 200:
-                    setModalMessage("Påmelding registrert");
+                    setModalMessage("Deltaker registrert");
                     setModalColor("$green100");
                     break;
 
                 case 403:
                     setModalMessage(
-                        `Påmedling er allerede registrert: ${data.message}`
+                        `Deltaker allerede registrert: ${data.message}`
                     );
                     setModalColor("$yellow100");
                     break;
 
                 case 404:
-                    setModalMessage("Påmelding ikke funnet");
+                    setModalMessage("Deltaker ikke funnet");
                     setModalColor("$red100");
                     break;
 
@@ -88,21 +93,20 @@ const QRScanner: React.FC = () => {
                 aria-labelledby="modal-title"
                 open={visible}
                 onClose={handleClose}
+                // @ts-ignore // Docs specifies this property exists
+                css={{ backgroundColor: modalColor }}
             >
-                <Modal.Header css={{ backgroundColor: modalColor }}>
+                <Modal.Header>
                     <Text id="modal-title" size={18}>
-                        Registrer påmelding
+                        Registrer deltaker
                     </Text>
                 </Modal.Header>
-                <Modal.Body css={{ backgroundColor: modalColor }}>
+                <Modal.Body>
                     <Text css={{ textAlign: "center" }} b size={30}>
                         {modalMessage}
                     </Text>
                 </Modal.Body>
-                <Modal.Footer
-                    justify="center"
-                    css={{ backgroundColor: modalColor }}
-                >
+                <Modal.Footer justify="center">
                     <Button
                         auto
                         flat
