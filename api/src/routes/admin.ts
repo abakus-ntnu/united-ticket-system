@@ -54,7 +54,7 @@ router.patch("/attendees/:id/admitted", async (req, res) => {
   }
 
   if (attendee.admitted != null) {
-    return res.send({ code: 403, message: "Attendee has already registered" });
+    return res.send({ code: 403, message: attendee.name });
   }
 
   try {
