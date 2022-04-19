@@ -17,11 +17,11 @@ router.get("/attendees/:id", async (req, res) => {
     }
 
     if (!attendee.active) {
-      return res.send({ message: "Attendee is not active", code: 403 });
+      return res.send({ message: "Not active", code: 403 });
     }
 
     if (attendee.admitted != null) {
-      return res.send({ message: "Attendee is already admitted", code: 403 });
+      return res.send({ message: "Already admitted", code: 403 });
     }
 
     res.send({ message: attendee, code: 200 });
@@ -32,14 +32,15 @@ router.get("/attendees/:id", async (req, res) => {
 });
 
 // Set photo_consent true/false
-router.patch("/attendees/:id/photo_consent", async (req, res) => {
+router.patch("/attendees/:id/photo_consent/:consent", async (req, res) => {
   try {
+    const photo_consent = req.params.consent === "true" ? true : false;
     const attendee = await prisma.attendees.update({
       where: {
         id: req.params.id,
       },
       data: {
-        photo_consent: req.body.data.photo_consent,
+        photo_consent: photo_consent,
       },
     });
     res.send({ message: attendee, code: 200 });
