@@ -1,5 +1,5 @@
 export type AttendantType = {
-  id: number;
+  id: string;
   name: string;
   email: string;
   group: string;

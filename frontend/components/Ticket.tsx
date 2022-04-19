@@ -1,10 +1,16 @@
-import { Text, Row, Col, Container, Card } from "@nextui-org/react";
-import React from "react";
+import { Text, Row, Container, Card } from "@nextui-org/react";
+import React, { useEffect } from "react";
 import QRCode from "react-qr-code";
+import { AttendantType } from "../../types/types";
 
-const TicketComponent: React.FC = () => {
-  let hasTicket: boolean = true; //TODO: Check if the user has valid ticket. Need to fetch from user backend.
-  return hasTicket ? (
+const TicketComponent = ({
+  ticket,
+  status,
+}: {
+  ticket?: AttendantType;
+  status: string;
+}) => {
+  return ticket !== undefined ? (
     <Row
       css={{
         height: "100vh",
@@ -41,7 +47,7 @@ const TicketComponent: React.FC = () => {
             }}
           >
             <QRCode
-              value="abakus.no"
+              value={ticket.id}
               fgColor="#FFFFFF"
               bgColor="#206C7A"
               size={190}
@@ -106,8 +112,7 @@ const TicketComponent: React.FC = () => {
               justifyContent: "center",
             }}
           >
-            {" "}
-            Din billett er ikke gyldig!
+            {status}
           </Text>
         </Card>
       </Container>
