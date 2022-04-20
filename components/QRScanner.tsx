@@ -14,7 +14,7 @@ import fetcher from "../lib/fetcher";
 
 const QRScanner: React.FC = () => {
   const [visible, setVisible] = useState(false);
-  const [id, setId] = useState<string | null>(null);
+  const [blockScan, setBlockScan] = useState(false);
   const [modalMessage, setModalMessage] = useState("No data");
   const [modalColor, setModalColor] = useState("");
 
@@ -23,14 +23,13 @@ const QRScanner: React.FC = () => {
   });
 
   const handleScan: OnResultFunction = async (result, error) => {
-    if (error) return console.log(error);
-
-    if (id) {
-      return;
-    }
-
+    if (!!error) return console.error(error);
+    
+    if (blockScan)
+    return;
+    
+    setBlockScan(true);
     if (result?.getText()) {
-      setId(result.getText());
 
       const data = await fetcher(`/api/admin/admit_attendee`, {
         body: JSON.stringify({
@@ -91,9 +90,7 @@ const QRScanner: React.FC = () => {
 
   const handleClose = () => {
     setVisible(false);
-    setId(null);
-    setModalColor("");
-    setModalMessage("No data");
+    setBlockScan(false);
   };
 
   return (
@@ -126,12 +123,15 @@ const QRScanner: React.FC = () => {
         </Card>
       ) : null}
 
-      <Row css={{ width: "100%" }} justify="center" align="center">
+      <Row className="HALOOO" css={{ width: "100%" }} justify="center" align="center">
+        {
+          !blockScan &&
         <QrReader
           onResult={handleScan}
           constraints={{ facingMode: "environment" }}
-          containerStyle={{ width: "100%" }}
+          containerStyle={{ width: "100%", height: "0" }}
         />
+        }
       </Row>
       <Modal
         closeButton
@@ -157,7 +157,7 @@ const QRScanner: React.FC = () => {
             auto
             flat
             css={{ backgroundColor: "$gray100" }}
-            onClick={handleClose}
+            onClick={()=>{setVisible(false)}}
             bordered
           >
             Close
