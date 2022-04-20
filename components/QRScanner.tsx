@@ -134,6 +134,7 @@ const QRScanner: React.FC = () => {
           onScan={handleScan}
           onError={handleError}
           delay={500}
+          facingMode="rear"
         />
       </Row>
       <Modal
