@@ -1,5 +1,5 @@
-import { Loading, Table, useTheme } from "@nextui-org/react";
-import { VFC } from "react";
+import { Loading, Switch, Table, useTheme } from "@nextui-org/react";
+import { useState, VFC } from "react";
 import { CheckmarkOutline, CloseOutline } from "react-ionicons";
 import useSWR from "swr";
 import { AttendantType } from "../../types/types";
@@ -14,13 +14,37 @@ const BooleanCell: VFC<{ value: boolean }> = (props) => {
   );
 };
 
+const SwitchCell: VFC<{ id: string; value: boolean }> = ({ id, value }) => {
+  const [active, setActive] = useState(value);
+
+  const handleChange = async () => {
+    const data = await fetchWithToken(
+      `${process.env.API_URL}/admin/attendees/${id}/active`,
+      { method: "PATCH", body: JSON.stringify({ data: { active: !active } }) }
+    ).catch((e) => console.log(e));
+
+    if (data) setActive(data.message.active);
+  };
+
+  return (
+    <Switch checked={active} initialChecked={value} onClick={handleChange} />
+  );
+};
+
 const UserTable: VFC = (props) => {
   const { data, error } = useSWR<AttendantType[]>(
     `${process.env.API_URL}/admin/attendees`,
     fetchWithToken
   );
 
-  const columns = ["NAME", "EMAIL", "GROUP", "REGISTERED", "PHOTO CONSENT"];
+  const columns = [
+    "NAME",
+    "EMAIL",
+    "GROUP",
+    "REGISTERED",
+    "PHOTO CONSENT",
+    "ACTIVE",
+  ];
 
   if (!data) {
     return <Loading />;
@@ -49,6 +73,9 @@ const UserTable: VFC = (props) => {
             </Table.Cell>
             <Table.Cell>
               <BooleanCell value={user.photo_consent} />
+            </Table.Cell>
+            <Table.Cell>
+              <SwitchCell id={user.id} value={user.active} />
             </Table.Cell>
           </Table.Row>
         ))}
