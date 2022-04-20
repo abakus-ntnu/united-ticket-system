@@ -1,6 +1,14 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Card, Text, Row, Modal, Button, Grid } from "@nextui-org/react";
+import {
+  Card,
+  Text,
+  Row,
+  Modal,
+  Button,
+  Grid,
+  Tooltip,
+} from "@nextui-org/react";
 import { CreateAttendantType } from "../../types/types";
 import { CloudUploadOutline } from "react-ionicons";
 import fetchWithToken from "../lib/fetchWithToken";
@@ -61,27 +69,55 @@ const FileUploader = () => {
   });
 
   return (
-    <>
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
-        <Card
-          color="primary"
-          bordered
-          shadow={false}
-          clickable
-          css={{ mw: "500px" }}
+    <Row justify="center">
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          margin: "10px 0",
+          gap: "5px",
+        }}
+      >
+        <div {...getRootProps()} style={{ display: "flex" }}>
+          <input {...getInputProps()} />
+          <Card
+            color="primary"
+            bordered
+            shadow={false}
+            clickable
+            css={{ mw: "500px" }}
+          >
+            <Grid.Container gap={2}>
+              <Grid xs={12} sm={2} justify="center">
+                <CloudUploadOutline color="#ffffff" height="40x" width="40px" />
+              </Grid>
+              <Grid xs={12} sm={10} justify="center" alignItems="center">
+                <Text color="white" css={{ textAlign: "center" }}>
+                  Last opp en en csv fil med brukere.
+                </Text>
+              </Grid>
+            </Grid.Container>
+          </Card>
+        </div>
+
+        <Tooltip
+          trigger="click"
+          content={"Per linje: [Fullt Navn],[epost],[linjeforening]"}
         >
-          <Grid.Container gap={2}>
-            <Grid xs={12} sm={2} justify="center">
-              <CloudUploadOutline color="#ffffff" height="40x" width="40px" />
-            </Grid>
-            <Grid xs={12} sm={10} justify="center" alignItems="center">
-              <Text color="white" css={{ textAlign: "center" }}>
-                Last opp en en csv fil med brukere. (Se formatering)
-              </Text>
-            </Grid>
-          </Grid.Container>
-        </Card>
+          <Card
+            shadow={false}
+            clickable
+            color="primary"
+            css={{
+              justifyContent: "center",
+              backgroundColor: "$gray600",
+              width: "fit-content",
+            }}
+          >
+            Format?
+          </Card>
+        </Tooltip>
       </div>
       <Modal
         closeButton
@@ -129,7 +165,7 @@ const FileUploader = () => {
           </Row>
         </Modal.Footer>
       </Modal>
-    </>
+    </Row>
   );
 };
 

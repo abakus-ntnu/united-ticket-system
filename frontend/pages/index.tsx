@@ -20,7 +20,8 @@ const Home = () => {
         <title>Billettsystem</title>
       </Head>
       <main className={styles.main}>
-        Velkommen til billettsystem-sida! Gå til /admin for å starte
+        Velkommen til billettsystem-sida! Gå til /admin hvis du vet hva du
+        holder på med:)
         <br />
       </main>
     </div>
