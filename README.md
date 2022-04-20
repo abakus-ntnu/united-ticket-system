@@ -1,12 +1,26 @@
-## Run the development server
+# United Ticket System
 
-Run the commands
+A system for creating and sending out QR tickets by email.
+
+## Setup
+
+Populate a local .env using .env.example
 
 ```bash
-yarn
-yarn dev
+$ docker-compose up -d
+$ yarn install
+$ yarn prisma generate
+$ yarn prisma db push
 ```
 
-## Icons
+## Run the dev server
 
-Icon-docs: https://react-ionicons.netlify.app/
+```bash
+$ yarn dev
+```
+
+## Open Prisma Studio (database tool)
+
+```bash
+yarn prisma studio
+```
