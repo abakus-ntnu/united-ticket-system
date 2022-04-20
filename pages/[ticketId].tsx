@@ -1,46 +1,59 @@
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import GdprComponent from "../components/Gdpr";
 import TicketComponent from "../components/Ticket";
 import { AttendantType } from "../lib/types";
-import { Loading } from "@nextui-org/react";
+import fetcher from "../lib/fetcher";
 
-const TicketPage: NextPage = () => {
-  const router = useRouter();
-  const [ticket, setTicket] = useState<AttendantType>();
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(true);
+export async function getServerSideProps({ query }: { query: any }) {
+  const response = await fetcher(
+    `${process.env.AUTH0_BASE_URL}/api/attendees/${query.ticketId}`
+  );
+  return {
+    props: {
+      data: response,
+    },
+  };
+}
 
-  useEffect(() => {
-    const ticketId = router.query.ticketId;
-    fetch(`/api/attendees/${ticketId}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        if (data.code === 200) {
-          setTicket(data.message);
-        } else if (data.code === 404) {
-          setStatus("Billetten din eksisterer ikke");
-        } else if (data.message === "Not active") {
-          setStatus("Billetten din er ikke aktiv");
-        } else if (data.message === "Already admitted") {
-          setStatus("Billetten din er allerede brukt");
-        } else if (data.code === 500) {
-          setStatus(
-            "Ooops. Her skjedde det en feil. Ta kontakt med arrangøren."
-          );
-        }
-        setLoading(false);
-      });
-  }, [router]);
-  if (loading) {
-    return <Loading />;
+const getStatus = (data: {
+  message: AttendantType | string;
+  code: number;
+}): string | null => {
+  if (data.code === 200) {
+    return null;
   }
+
+  if (data.code === 404) {
+    return "Billetten din eksisterer ikke";
+  }
+
+  if (data.message === "Not active") {
+    return "Billetten din er ikke aktiv";
+  }
+
+  if (data.message === "Already admitted") {
+    return "Billetten din er allerede brukt";
+  }
+
+  return "Ooops. Her skjedde det en feil. Ta kontakt med arrangøren.";
+};
+
+const getTicket = (message: AttendantType | string) =>
+  typeof message === "string" ? null : (message as AttendantType);
+
+const needsToConsent = (ticket: AttendantType | null) =>
+  ticket?.photo_consent === null;
+
+const TicketPage = ({
+  data,
+}: {
+  data: { message: AttendantType | string; code: number };
+}) => {
+  const ticket = getTicket(data.message);
+  const status = getStatus(data);
+
   return (
     <div>
-      {ticket?.photo_consent === null ? (
+      {needsToConsent(ticket) ? (
         <GdprComponent>
           <TicketComponent ticket={ticket} status={status}></TicketComponent>
         </GdprComponent>
