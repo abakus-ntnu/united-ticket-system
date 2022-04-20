@@ -67,14 +67,14 @@ router.patch("/attendees/:id/admitted", async (req, res) => {
     },
   });
   if (attendee == null) {
-    return res.send({ code: 404, message: "Attendee does not exist" });
+    return res.send({ code: 404, message: attendee });
   }
   if (!attendee.active) {
-    return res.send({ code: 403, message: "Attendee is not active" });
+    return res.send({ code: 403, message: attendee });
   }
 
   if (attendee.admitted != null) {
-    return res.send({ code: 403, message: attendee.name });
+    return res.send({ code: 403, message: attendee });
   }
 
   try {
