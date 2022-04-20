@@ -19,14 +19,16 @@ const SwitchCell: VFC<{ id: string; value: boolean }> = ({ id, value }) => {
 
   const handleChange = async () => {
     const data = await fetchWithToken(
-      `${process.env.API_URL}/attendees/${id}/active`,
-      { body: JSON.stringify({ active: !active }) }
+      `${process.env.API_URL}/admin/attendees/${id}/active`,
+      { method: "PATCH", body: JSON.stringify({ data: { active: !active } }) }
     ).catch((e) => console.log(e));
 
-    if (data) setActive(data.active);
+    if (data) setActive(data.message.active);
   };
 
-  return <Switch initialChecked={value} onClick={handleChange} />;
+  return (
+    <Switch checked={active} initialChecked={value} onClick={handleChange} />
+  );
 };
 
 const UserTable: VFC = (props) => {
