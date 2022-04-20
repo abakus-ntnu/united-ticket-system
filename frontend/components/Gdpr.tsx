@@ -17,12 +17,16 @@ const GdprComponent: React.FC = ({ children }) => {
   const router = useRouter();
   const ticketId = router.query.ticketId;
   const setPhotoConsent = async (consent: boolean) => {
-    const response = await fetch(
-      `${process.env.API_URL}/attendees/${ticketId}/photo_consent/${consent}`,
-      {
-        method: "PATCH",
-      }
-    ).then((response) => response.json());
+    await fetch(`/api/attendees/update_photo_consent`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: ticketId,
+        consent,
+      }),
+    });
   };
 
   const handleAccept = (e: React.MouseEvent<HTMLButtonElement>) => {

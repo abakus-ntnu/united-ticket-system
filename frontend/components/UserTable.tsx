@@ -33,7 +33,7 @@ const SwitchCell: VFC<{ id: string; value: boolean }> = ({ id, value }) => {
 
 const UserTable: VFC = (props) => {
   const { data, error } = useSWR<AttendantType[]>(
-    `${process.env.API_URL}/admin/attendees`,
+    `/api/admin/attendees`,
     fetchWithToken
   );
 

@@ -20,15 +20,15 @@ const FileUploader = () => {
   const [attendice, setAttendice] = useState<CreateAttendantType[]>([]);
 
   const handleFileUpload = async () => {
-    const response = await fetchWithToken(
-      `${process.env.API_URL}/admin/attendees`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          data: attendice,
-        }),
-      }
-    );
+    const response = await fetchWithToken(`/api/admin/attendees`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: attendice,
+      }),
+    });
     setVisible(false);
     if (response.code === 200) {
       router.reload();

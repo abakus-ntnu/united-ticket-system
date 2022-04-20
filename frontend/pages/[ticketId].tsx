@@ -1,6 +1,4 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import GdprComponent from "../components/Gdpr";
@@ -16,7 +14,7 @@ const TicketPage: NextPage = () => {
 
   useEffect(() => {
     const ticketId = router.query.ticketId;
-    fetch(`${process.env.API_URL}/attendees/${ticketId}`)
+    fetch(`/api/attendees/${ticketId}`)
       .then((response) => {
         return response.json();
       })

@@ -4,7 +4,6 @@ import cors from "cors";
 import jwt from "express-jwt";
 import jwks from "jwks-rsa";
 import admin from "./routes/admin";
-import attendee from "./routes/attendee";
 
 const withAuth = jwt({
   secret: jwks.expressJwtSecret({
@@ -25,7 +24,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/admin", admin);
-app.use("/", attendee);
 
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
