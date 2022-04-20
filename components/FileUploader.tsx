@@ -9,10 +9,10 @@ import {
   Grid,
   Tooltip,
 } from "@nextui-org/react";
-import { CreateAttendantType } from "../../types/types";
+import { CreateAttendantType } from "../lib/types";
 import { CloudUploadOutline } from "react-ionicons";
-import fetchWithToken from "../lib/fetchWithToken";
 import { useRouter } from "next/router";
+import fetcher from "../lib/fetcher";
 
 const FileUploader = () => {
   const router = useRouter();
@@ -20,11 +20,8 @@ const FileUploader = () => {
   const [attendice, setAttendice] = useState<CreateAttendantType[]>([]);
 
   const handleFileUpload = async () => {
-    const response = await fetchWithToken(`/api/admin/attendees`, {
+    const response = await fetcher(`/api/admin/attendees`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         data: attendice,
       }),

@@ -1,13 +1,13 @@
 {
-  "name": "united-ticket-system-frontend",
-  "version": "0.1.0",
+  "name": "united-ticket-system",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier": "prettier '**/*.{js,ts,tsx,css,md}' --write",
+    "prettier": "prettier '**/*.{js,ts,tsx,css,md,yml}' --write",
     "lint:prettier": "prettier '**/*.{js,css,md,ts,tsx}' --check"
   },
   "dependencies": {

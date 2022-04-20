@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import GdprComponent from "../components/Gdpr";
 import TicketComponent from "../components/Ticket";
-import { AttendantType } from "../../types/types";
+import { AttendantType } from "../lib/types";
 import { Loading } from "@nextui-org/react";
 
 const TicketPage: NextPage = () => {

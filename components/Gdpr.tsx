@@ -8,20 +8,17 @@ import {
   Grid,
   Spacer,
 } from "@nextui-org/react";
-import { responseSymbol } from "next/dist/server/web/spec-compliant/fetch-event";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import fetcher from "../lib/fetcher";
 
 const GdprComponent: React.FC = ({ children }) => {
   const [hasAnswered, setHasAnswered] = useState(false);
   const router = useRouter();
   const ticketId = router.query.ticketId;
   const setPhotoConsent = async (consent: boolean) => {
-    await fetch(`/api/attendees/update_photo_consent`, {
+    await fetcher(`/api/attendees/update_photo_consent`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         id: ticketId,
         consent,

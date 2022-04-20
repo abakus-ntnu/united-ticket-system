@@ -1,5 +1,5 @@
 import { withApiAuthRequired } from "@auth0/nextjs-auth0";
-import { AttendantType } from "../../../../types/types";
+import { AttendantType } from "../../../lib/types";
 import { PrismaClient } from "@prisma/client";
 import validateAttendee from "../../../lib/validateAttendee";
 

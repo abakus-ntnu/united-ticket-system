@@ -11,7 +11,7 @@ import React, { useState } from "react";
 // @ts-ignore
 import QrReader from "react-qr-scanner";
 import useSWR from "swr";
-import fetchWithToken from "../lib/fetchWithToken";
+import fetcher from "../lib/fetcher";
 
 const QRScanner: React.FC = () => {
   const [visible, setVisible] = useState(false);
@@ -19,7 +19,7 @@ const QRScanner: React.FC = () => {
   const [modalMessage, setModalMessage] = useState("No data");
   const [modalColor, setModalColor] = useState("");
 
-  const count = useSWR(`/api/admin/attendee_count`, fetchWithToken, {
+  const count = useSWR(`/api/admin/attendee_count`, fetcher, {
     refreshInterval: 5000,
   });
 
@@ -30,7 +30,7 @@ const QRScanner: React.FC = () => {
     if (result?.text) {
       setId(result.text);
 
-      const data = await fetchWithToken(`/api/admin/admit_attendee`, {
+      const data = await fetcher(`/api/admin/admit_attendee`, {
         body: JSON.stringify({
           id: result.text,
         }),

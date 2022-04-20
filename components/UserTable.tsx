@@ -2,8 +2,8 @@ import { Loading, Switch, Table, useTheme } from "@nextui-org/react";
 import { useState, VFC } from "react";
 import { CheckmarkOutline, CloseOutline } from "react-ionicons";
 import useSWR from "swr";
-import { AttendantType } from "../../types/types";
-import fetchWithToken from "../lib/fetchWithToken";
+import { AttendantType } from "../lib/types";
+import fetcher from "../lib/fetcher";
 
 const BooleanCell: VFC<{ value: boolean }> = (props) => {
   const { theme } = useTheme();
@@ -18,12 +18,9 @@ const SwitchCell: VFC<{ id: string; value: boolean }> = ({ id, value }) => {
   const [active, setActive] = useState(value);
 
   const handleChange = async () => {
-    const data = await fetchWithToken(`/api/admin/set_attendee_active`, {
+    const data = await fetcher(`/api/admin/set_attendee_active`, {
       method: "PATCH",
       body: JSON.stringify({ active: !active, id }),
-      headers: {
-        "Content-Type": "application/json",
-      },
     }).catch((e) => console.log(e));
 
     if (data) setActive(data.message.active);
@@ -37,7 +34,7 @@ const SwitchCell: VFC<{ id: string; value: boolean }> = ({ id, value }) => {
 const UserTable: VFC = (props) => {
   const { data, error } = useSWR<AttendantType[]>(
     `/api/admin/attendees`,
-    fetchWithToken
+    fetcher
   );
 
   const columns = [

@@ -1,7 +1,7 @@
 import { Text, Row, Container, Card } from "@nextui-org/react";
-import React, { useEffect } from "react";
+import React from "react";
 import QRCode from "react-qr-code";
-import { AttendantType } from "../../types/types";
+import { AttendantType } from "../lib/types";
 
 const TicketComponent = ({
   ticket,

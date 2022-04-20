@@ -1,4 +1,4 @@
-import { AttendantType } from "../../types/types";
+import { AttendantType } from "./types";
 
 const validateAttendee = (attendee: Partial<AttendantType>) =>
   attendee.name && attendee.email && attendee.group;

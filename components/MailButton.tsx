@@ -1,11 +1,11 @@
 import { Loading, Button } from "@nextui-org/react";
 import { VFC } from "react";
 import useSWR from "swr";
-import { AttendantType } from "../../types/types";
-import fetchWithToken from "../lib/fetchWithToken";
+import { AttendantType } from "../lib/types";
+import fetcher from "../lib/fetcher";
 
 const sendTickets = () => {
-  fetchWithToken(`/api/admin/send_emails`, {
+  fetcher(`/api/admin/send_emails`, {
     method: "POST",
   }).then((res) => console.log(res));
 };
@@ -13,7 +13,7 @@ const sendTickets = () => {
 const MailButton: VFC = () => {
   const { data, error } = useSWR<AttendantType[]>(
     `/api/admin/attendees`,
-    fetchWithToken
+    fetcher
   );
 
   if (!data) {
