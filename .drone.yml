@@ -3,78 +3,36 @@ kind: pipeline
 name: default
 
 steps:
-  - name: setup-frontend
+  - name: setup
     image: node:14-alpine
     when:
       event: pull_request
     commands:
-      - cd frontend
       - yarn install
 
-  - name: build-frontend
+  - name: build
     image: node:14-alpine
     when:
       event: pull_request
     depends_on:
-      - setup-frontend
+      - setup
     commands:
-      - cd frontend
       - yarn build
 
-  - name: prettier-frontend
+  - name: prettier
     image: node:14-alpine
     when:
       event: pull_request
     depends_on:
-      - setup-frontend
+      - setup
     commands:
-      - cd frontend
       - yarn lint:prettier
 
-  - name: lint-frontend
+  - name: lint
     image: node:14-alpine
     when:
       event: pull_request
     depends_on:
-      - setup-frontend
+      - setup
     commands:
-      - cd frontend
-      - yarn lint
-
-  - name: setup-api
-    image: node:14-alpine
-    when:
-      event: pull_request
-    commands:
-      - cd api
-      - yarn install
-
-  - name: build-api
-    image: node:14-alpine
-    when:
-      event: pull_request
-    depends_on:
-      - setup-api
-    commands:
-      - cd api
-      - yarn build
-
-  - name: prettier-api
-    image: node:14-alpine
-    when:
-      event: pull_request
-    depends_on:
-      - setup-api
-    commands:
-      - cd api
-      - yarn lint:prettier
-
-  - name: lint-api
-    image: node:14-alpine
-    when:
-      event: pull_request
-    depends_on:
-      - setup-api
-    commands:
-      - cd api
       - yarn lint
