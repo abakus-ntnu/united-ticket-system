@@ -39,6 +39,31 @@ router.post("/attendees", async (req, res) => {
   }
 });
 
+router.get("/attendees/count", async (req, res) => {
+  const total = (
+    await prisma.attendees.count({
+      select: {
+        _all: true,
+        admitted: true,
+      },
+    })
+  ).admitted;
+
+  const last_ten_minutes = await prisma.attendees.count({
+    where: {
+      admitted: {
+        gte: new Date(Date.now() - 10 * 60000),
+      },
+    },
+  });
+
+  return res.send({
+    code: 200,
+    total: total,
+    last_ten_minutes: last_ten_minutes,
+  });
+});
+
 // Set admitted = NOW()
 router.patch("/attendees/:id/admitted", async (req, res) => {
   const attendeeID = req.params.id;
@@ -48,14 +73,14 @@ router.patch("/attendees/:id/admitted", async (req, res) => {
     },
   });
   if (attendee == null) {
-    return res.send({ code: 404, message: "Attendee does not exist" });
+    return res.send({ code: 404, message: attendee });
   }
   if (!attendee.active) {
-    return res.send({ code: 403, message: "Attendee is not active" });
+    return res.send({ code: 403, message: attendee });
   }
 
   if (attendee.admitted != null) {
-    return res.send({ code: 403, message: "Attendee has already registered" });
+    return res.send({ code: 403, message: attendee });
   }
 
   try {
