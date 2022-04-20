@@ -8,14 +8,13 @@ import {
   Text,
 } from "@nextui-org/react";
 import React, { useState } from "react";
-// @ts-ignore
-import QrReader from "react-qr-scanner";
+import { OnResultFunction, QrReader } from "react-qr-reader";
 import useSWR from "swr";
 import fetcher from "../lib/fetcher";
 
 const QRScanner: React.FC = () => {
   const [visible, setVisible] = useState(false);
-  const [id, setId] = useState<string | null>(null);
+  const [blockScan, setBlockScan] = useState(false);
   const [modalMessage, setModalMessage] = useState("No data");
   const [modalColor, setModalColor] = useState("");
 
@@ -23,16 +22,18 @@ const QRScanner: React.FC = () => {
     refreshInterval: 5000,
   });
 
-  const handleScan = async (result: any) => {
-    if (id) {
-      return;
-    }
-    if (result?.text) {
-      setId(result.text);
+  const handleScan: OnResultFunction = async (result, error) => {
+    if (!!error) return console.error(error);
+    
+    if (blockScan)
+    return;
+    
+    setBlockScan(true);
+    if (result?.getText()) {
 
       const data = await fetcher(`/api/admin/admit_attendee`, {
         body: JSON.stringify({
-          id: result.text,
+          id: result.getText(),
         }),
         headers: {
           "Content-Type": "application/json",
@@ -87,15 +88,9 @@ const QRScanner: React.FC = () => {
     }
   };
 
-  const handleError = (error: any) => {
-    console.log(error);
-  };
-
   const handleClose = () => {
-    setId(null);
     setVisible(false);
-    setModalColor("");
-    setModalMessage("No data");
+    setBlockScan(false);
   };
 
   return (
@@ -128,14 +123,15 @@ const QRScanner: React.FC = () => {
         </Card>
       ) : null}
 
-      <Row css={{ width: "100%" }} justify="center" align="center">
+      <Row className="HALOOO" css={{ width: "100%" }} justify="center" align="center">
+        {
+          !blockScan &&
         <QrReader
-          style={{ width: "100vh" }}
-          onScan={handleScan}
-          onError={handleError}
-          delay={500}
-          facingMode="rear"
+          onResult={handleScan}
+          constraints={{ facingMode: "environment" }}
+          containerStyle={{ width: "100%", height: "0" }}
         />
+        }
       </Row>
       <Modal
         closeButton
@@ -161,7 +157,7 @@ const QRScanner: React.FC = () => {
             auto
             flat
             css={{ backgroundColor: "$gray100" }}
-            onClick={handleClose}
+            onClick={()=>{setVisible(false)}}
             bordered
           >
             Close
