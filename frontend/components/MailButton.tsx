@@ -5,14 +5,14 @@ import { AttendantType } from "../../types/types";
 import fetchWithToken from "../lib/fetchWithToken";
 
 const sendTickets = () => {
-  fetchWithToken(`${process.env.API_URL}/admin/attendees/send_emails`, {
+  fetchWithToken(`/api/admin/send_emails`, {
     method: "POST",
   }).then((res) => console.log(res));
 };
 
 const MailButton: VFC = () => {
   const { data, error } = useSWR<AttendantType[]>(
-    `${process.env.API_URL}/admin/attendees`,
+    `/api/admin/attendees`,
     fetchWithToken
   );
 
