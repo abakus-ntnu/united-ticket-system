@@ -58,12 +58,11 @@ const TicketComponent = ({
                 justifyContent: "center",
               }}
             >
-              <QRCode
-                value={ticket.id}
-                fgColor="#FFFFFF"
-                bgColor="#206C7A"
-                size={190}
-              />
+              <Card cover={false} css={{ width: "fit-content" }}>
+                <Card.Body css={{ padding: "12px 12px" }}>
+                  <QRCode value={ticket.id} size={190} />
+                </Card.Body>
+              </Card>
               <Text
                 h3
                 color="white"
