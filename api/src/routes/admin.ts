@@ -5,7 +5,6 @@ const router = express.Router();
 
 const prisma = new PrismaClient();
 
-// Send email to attendees with email_sent=false, and set email_sent true - should accept a list of ids
 router.post("/attendees/send_emails", async (req, res) => {
   const attendees = await prisma.attendees.findMany({
     where: {

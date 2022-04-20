@@ -19,11 +19,9 @@ const QRScanner: React.FC = () => {
   const [modalMessage, setModalMessage] = useState("No data");
   const [modalColor, setModalColor] = useState("");
 
-  const count = useSWR(
-    `${process.env.API_URL}/admin/attendees/count`,
-    fetchWithToken,
-    { refreshInterval: 5000 }
-  );
+  const count = useSWR(`/api/admin/attendee_count`, fetchWithToken, {
+    refreshInterval: 5000,
+  });
 
   const handleScan = async (result: any) => {
     if (id) {
@@ -32,12 +30,15 @@ const QRScanner: React.FC = () => {
     if (result?.text) {
       setId(result.text);
 
-      const data = await fetchWithToken(
-        `${process.env.API_URL}/admin/attendees/${result.text}/admitted/`,
-        {
-          method: "PATCH",
-        }
-      ).catch((e) => console.error(e));
+      const data = await fetchWithToken(`/api/admin/admit_attendee`, {
+        body: JSON.stringify({
+          id: result.text,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+      }).catch((e) => console.error(e));
 
       if (!data) {
         setModalMessage("No data");
