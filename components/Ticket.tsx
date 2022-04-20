@@ -7,10 +7,10 @@ const TicketComponent = ({
   ticket,
   status,
 }: {
-  ticket?: AttendantType;
-  status: string;
+  ticket: AttendantType | null;
+  status: string | null;
 }) => {
-  return ticket !== undefined ? (
+  return (
     <Row
       css={{
         height: "100vh",
@@ -37,83 +37,56 @@ const TicketComponent = ({
             justifyContent: "center",
           }}
         >
-          <Card.Body
-            css={{
-              p: 0,
-              height: "100vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <QRCode
-              value={ticket.id}
-              fgColor="#FFFFFF"
-              bgColor="#206C7A"
-              size={190}
-            />
+          {ticket === null ? (
             <Text
               h3
               color="white"
               css={{
                 display: "flex",
                 justifyContent: "center",
-                paddingTop: "40px",
               }}
             >
-              Her er din billett!
+              {status}
             </Text>
-            <Text
-              h4
-              color="white"
+          ) : (
+            <Card.Body
               css={{
+                p: 0,
+                height: "100vh",
                 display: "flex",
+                alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              Må scannes av dørvakt.
-            </Text>
-          </Card.Body>
-        </Card>
-      </Container>
-    </Row>
-  ) : (
-    <Row
-      css={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Container
-        className="test"
-        css={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Card
-          css={{
-            background: "$cyan900",
-            height: "400px",
-            width: "400px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            h3
-            color="white"
-            css={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            {status}
-          </Text>
+              <QRCode
+                value={ticket.id}
+                fgColor="#FFFFFF"
+                bgColor="#206C7A"
+                size={190}
+              />
+              <Text
+                h3
+                color="white"
+                css={{
+                  display: "flex",
+                  justifyContent: "center",
+                  paddingTop: "40px",
+                }}
+              >
+                Her er din billett!
+              </Text>
+              <Text
+                h4
+                color="white"
+                css={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                Må scannes av dørvakt.
+              </Text>
+            </Card.Body>
+          )}
         </Card>
       </Container>
     </Row>
