@@ -30,23 +30,25 @@ const sendTickets = async (attendees: Array<Attendees>) => {
     }
   });
 
-  attendees.map((attendee) => {
-    const templatedHTML = template({
-      event: "Gjenåpningsfesten",
-      base_url: "billett.abakus.no",
-      id: attendee.id,
-      warning:
-        "NB: før du får opp billetten din må du svare på samtykke til bilder. Gjør gjerne dette før selve eventet starter.",
-    });
+  await Promise.all(
+    attendees.map((attendee) => {
+      const templatedHTML = template({
+        event: "Gjenåpningsfesten",
+        base_url: "billett.abakus.no",
+        id: attendee.id,
+        warning:
+          "NB: før du får opp billetten din må du svare på samtykke til bilder. Gjør gjerne dette før selve eventet starter.",
+      });
 
-    transporter.sendMail({
-      from: `A-blokka billettsystem <noreply@abakus.no>`,
-      to: attendee.email,
-      subject: `Billett`,
-      text: `Billetten din til Gjenåpningsfesten finner du på billett.abakus.no/${attendee.id}`,
-      html: templatedHTML,
-    });
-  });
+      return transporter.sendMail({
+        from: `A-blokka billettsystem <noreply@abakus.no>`,
+        to: attendee.email,
+        subject: `Billett`,
+        text: `Billetten din til Gjenåpningsfesten finner du på billett.abakus.no/${attendee.id}`,
+        html: templatedHTML,
+      });
+    })
+  );
 };
 
 export default sendTickets;
