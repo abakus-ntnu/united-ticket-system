@@ -24,7 +24,7 @@ const port = 8080; // default port to listen
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/admin", withAuth, admin);
+app.use("/admin", admin);
 app.use("/", attendee);
 
 app.listen(port, () => {
