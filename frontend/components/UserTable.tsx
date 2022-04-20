@@ -18,10 +18,13 @@ const SwitchCell: VFC<{ id: string; value: boolean }> = ({ id, value }) => {
   const [active, setActive] = useState(value);
 
   const handleChange = async () => {
-    const data = await fetchWithToken(
-      `${process.env.API_URL}/admin/attendees/${id}/active`,
-      { method: "PATCH", body: JSON.stringify({ data: { active: !active } }) }
-    ).catch((e) => console.log(e));
+    const data = await fetchWithToken(`/api/admin/set_attendee_active`, {
+      method: "PATCH",
+      body: JSON.stringify({ active: !active, id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((e) => console.log(e));
 
     if (data) setActive(data.message.active);
   };
