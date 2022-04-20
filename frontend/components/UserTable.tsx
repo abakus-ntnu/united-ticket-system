@@ -35,7 +35,14 @@ const UserTable: VFC = (props) => {
     fetchWithToken
   );
 
-  const columns = ["NAME", "EMAIL", "GROUP", "REGISTERED", "PHOTO CONSENT"];
+  const columns = [
+    "NAME",
+    "EMAIL",
+    "GROUP",
+    "REGISTERED",
+    "PHOTO CONSENT",
+    "ACTIVE",
+  ];
 
   if (!data) {
     return <Loading />;
