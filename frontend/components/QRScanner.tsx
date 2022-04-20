@@ -54,14 +54,18 @@ const QRScanner: React.FC = () => {
           if (!data.message.active) {
             setModalMessage(`Deltaker har meldt seg av: ${data.message.name}`);
             setModalColor("$red100");
-            break;
-          } else if (data.message.attended) {
+          } else if (data.message.admitted) {
             setModalMessage(
               `Deltaker allerede registrert: ${data.message.name}`
             );
             setModalColor("$yellow100");
-            break;
+          } else {
+            setModalMessage(
+              `Kunne ikke registrere deltaker: ${data.message.name}`
+            );
+            setModalColor("$red100");
           }
+          break;
 
         case 404:
           setModalMessage("Deltaker ikke funnet");
@@ -69,7 +73,11 @@ const QRScanner: React.FC = () => {
           break;
 
         default:
-          setModalMessage("Unknown error: " + data.code);
+          setModalMessage(
+            "Unknown error: " + data.code + (typeof data.message == "string")
+              ? `, ${data.message}`
+              : ""
+          );
           console.error(data.message);
           setModalColor("$red100");
           break;
