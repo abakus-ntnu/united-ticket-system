@@ -8,6 +8,7 @@ export default withApiAuthRequired(async (req, res) => {
   const attendees = await prisma.attendees.findMany({
     where: {
       email_sent: false,
+      active: true,
     },
   });
 
