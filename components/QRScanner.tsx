@@ -46,7 +46,7 @@ const QRScanner: React.FC = () => {
 
       switch (data.code) {
         case 200:
-          setModalMessage("Deltaker registrert");
+          setModalMessage(`Deltaker registrert: ${data.message.group}`);
           setModalColor("$green100");
           break;
 

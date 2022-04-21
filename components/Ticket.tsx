@@ -30,8 +30,9 @@ const TicketComponent = ({
         <Card
           css={{
             background: "$cyan900",
-            height: "400px",
+            height: "fit-content",
             width: "400px",
+            minHeight: "400px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -51,16 +52,32 @@ const TicketComponent = ({
           ) : (
             <Card.Body
               css={{
-                p: 0,
-                height: "100vh",
+                p: "10px 0",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <Card cover={false} css={{ width: "fit-content" }}>
-                <Card.Body css={{ padding: "12px 12px" }}>
+              <Card cover={false} css={{ width: "fit-content", m: "10px" }}>
+                <Card.Body css={{ padding: "12px" }}>
                   <QRCode value={ticket.id} size={190} />
+                </Card.Body>
+              </Card>
+              <Card cover={false} css={{ width: "fit-content" }}>
+                <Card.Body css={{ padding: "12px" }}>
+                  <Text
+                    h4
+                    css={{
+                      textAlign: "center",
+                      maxW: "190px",
+                      wordWrap: "break-word",
+                      w: "190px",
+                      flex: 1,
+                    }}
+                    weight={"bold"}
+                  >
+                    {ticket.group}
+                  </Text>
                 </Card.Body>
               </Card>
               <Text
@@ -69,7 +86,7 @@ const TicketComponent = ({
                 css={{
                   display: "flex",
                   justifyContent: "center",
-                  paddingTop: "40px",
+                  paddingTop: "30px",
                 }}
               >
                 Her er din billett!
