@@ -3,7 +3,7 @@ export type AttendantType = {
   name: string;
   email: string;
   group: string;
-  ticket_sent: boolean;
+  email_sent: boolean;
   admitted: boolean;
   active: boolean;
   photo_consent: boolean;
