@@ -46,9 +46,9 @@ const FileUploader = () => {
         attendice.forEach((attendant) => {
           const attendantData = attendant.split(",");
           const newAttendant: CreateAttendantType = {
-            name: attendantData[0],
-            email: attendantData[1],
-            group: attendantData[2],
+            name: attendantData[0].trim(),
+            email: attendantData[1].trim(),
+            group: attendantData[2].trim(),
           };
           tempAttendice.push(newAttendant);
         });
