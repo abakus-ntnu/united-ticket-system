@@ -17,7 +17,7 @@ const sendTickets = async (attendees: Array<Attendees>) => {
       privateKey: process.env.EMAIL_PRIVATE_KEY,
     },
   });
-  transporter.verify(function (error, success) {
+  await transporter.verify(function (error, success) {
     if (error) {
       console.log("SMTP connection error", error); // eslint-disable-line no-console
     } else {
@@ -25,7 +25,7 @@ const sendTickets = async (attendees: Array<Attendees>) => {
     }
   });
 
-  await Promise.all(
+  return await Promise.allSettled(
     attendees.map((attendee) => {
       const templatedHTML = template({
         event: "Gjenåpningsfesten",

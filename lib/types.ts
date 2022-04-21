@@ -4,8 +4,7 @@ export type AttendantType = {
   email: string;
   group: string;
   ticket_sent: boolean;
-  registered: boolean;
-  attended: boolean;
+  admitted: boolean;
   active: boolean;
   photo_consent: boolean;
   qr: string | null;
