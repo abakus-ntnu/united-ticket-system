@@ -11,9 +11,12 @@ const AdminNavbar: React.FC = () => {
 
   const NavButton: React.FC<{ path: string }> = ({ path, children }) => (
     <Button
-      disabled={router.asPath.endsWith(path)}
+      clickable={!router.asPath.endsWith(path)}
       onClick={() => {
         navigateTo(path);
+      }}
+      css={{
+        textDecoration: router.asPath.endsWith(path) ? "underline 2px" : "",
       }}
     >
       {children}
@@ -22,7 +25,7 @@ const AdminNavbar: React.FC = () => {
 
   return (
     <Row justify="center">
-      <Button.Group size="sm">
+      <Button.Group size="sm" bordered>
         <NavButton path="/admin">Administrer</NavButton>
         <NavButton path="/admin/scan">Scan billett</NavButton>
       </Button.Group>
