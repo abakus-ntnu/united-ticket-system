@@ -64,7 +64,8 @@ const GdprComponent: React.FC = ({ children }) => {
             </Text>
             <Text h4 color="white" css={{ m: 0, textAlign: "center" }}>
               Jeg samtykker til at det kan tas bilder av meg ved dette
-              arrangementet, og til at disse kan publiseres på Abakus.no.
+              arrangementet, og til at disse kan publiseres på linjeforeningenes
+              nettsider.
             </Text>
           </Col>
           <Spacer y={3} />
