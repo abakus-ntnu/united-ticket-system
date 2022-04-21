@@ -24,13 +24,11 @@ const QRScanner: React.FC = () => {
 
   const handleScan: OnResultFunction = async (result, error) => {
     if (!!error) return console.error(error);
-    
-    if (blockScan)
-    return;
-    
+
+    if (blockScan) return;
+
     setBlockScan(true);
     if (result?.getText()) {
-
       const data = await fetcher(`/api/admin/admit_attendee`, {
         body: JSON.stringify({
           id: result.getText(),
@@ -123,15 +121,19 @@ const QRScanner: React.FC = () => {
         </Card>
       ) : null}
 
-      <Row className="HALOOO" css={{ width: "100%" }} justify="center" align="center">
-        {
-          !blockScan &&
-        <QrReader
-          onResult={handleScan}
-          constraints={{ facingMode: "environment" }}
-          containerStyle={{ width: "100%", height: "0" }}
-        />
-        }
+      <Row
+        className="HALOOO"
+        css={{ width: "100%" }}
+        justify="center"
+        align="center"
+      >
+        {!blockScan && (
+          <QrReader
+            onResult={handleScan}
+            constraints={{ facingMode: "environment" }}
+            containerStyle={{ width: "100%", height: "0" }}
+          />
+        )}
       </Row>
       <Modal
         closeButton
@@ -157,7 +159,9 @@ const QRScanner: React.FC = () => {
             auto
             flat
             css={{ backgroundColor: "$gray100" }}
-            onClick={()=>{setVisible(false)}}
+            onClick={() => {
+              setVisible(false);
+            }}
             bordered
           >
             Close
