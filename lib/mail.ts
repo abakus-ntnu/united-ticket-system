@@ -1,15 +1,18 @@
-import { Attendees } from "@prisma/client";
+import { Attendees, PrismaClient } from "@prisma/client";
 import nodemailer from "nodemailer";
 import handlebars from "handlebars";
 import mailTemplate from "./mailTemplate";
 
-const sendTickets = async (attendees: Array<Attendees>) => {
+const prisma = new PrismaClient();
+
+const sendTickets = async (attendees: Attendees[]) => {
+  const startMs = Date.now();
   const template = handlebars.compile(mailTemplate);
 
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    host: "smtp-relay.gmail.com",
+    port: 587,
+    secure: false,
     auth: {
       type: "OAuth2",
       user: "noreply@abakus.no",
@@ -17,33 +20,54 @@ const sendTickets = async (attendees: Array<Attendees>) => {
       privateKey: process.env.EMAIL_PRIVATE_KEY,
     },
   });
-  await transporter.verify(function (error, success) {
+
+  transporter.verify(function (error, success) {
     if (error) {
-      console.log("SMTP connection error", error); // eslint-disable-line no-console
-    } else {
-      console.log("SMTP connection success", success); // eslint-disable-line no-console
+      return Promise.reject(error);
     }
   });
 
-  return await Promise.allSettled(
-    attendees.map((attendee) => {
-      const templatedHTML = template({
-        event: "Gjenåpningsfesten",
-        base_url: "billett.abakus.no",
-        id: attendee.id,
-        warning:
-          "NB: før du får opp billetten din må du svare på samtykke til bilder. Gjør gjerne dette før selve eventet starter.",
-      });
+  const sentEmails = [];
+  const failedEmails = [];
 
-      return transporter.sendMail({
-        from: `A-blokka billettsystem <noreply@abakus.no>`,
-        to: attendee.email,
-        subject: `Billett`,
-        text: `Billetten din til Gjenåpningsfesten finner du på billett.abakus.no/${attendee.id}`,
-        html: templatedHTML,
+  for (const attendee of attendees) {
+    if (Date.now() - startMs > 45000) {
+      transporter.close();
+      return [sentEmails, failedEmails];
+    }
+
+    const templatedHTML = template({
+      event: "Gjenåpningsfesten",
+      base_url: "billett.abakus.no",
+      id: attendee.id,
+      warning:
+        "NB: før du får opp billetten din må du svare på samtykke til bilder. Gjør gjerne dette før selve eventet starter.",
+    });
+
+    const result = await transporter.sendMail({
+      from: `A-blokka billettsystem <noreply@abakus.no>`,
+      to: attendee.email,
+      subject: `Billett til A-Blokka fest: Lørdag`,
+      text: `Billetten din til Gjenåpningsfesten finner du på billett.abakus.no/${attendee.id}`,
+      html: templatedHTML,
+    });
+
+    if ((result.accepted[0] as string).length > 0) {
+      await prisma.attendees.update({
+        where: {
+          id: attendee.id,
+        },
+        data: {
+          email_sent: true,
+        },
       });
-    })
-  );
+      sentEmails.push(attendee.email);
+    } else {
+      failedEmails.push(attendee.email);
+    }
+  }
+  transporter.close();
+  return [sentEmails, failedEmails];
 };
 
 export default sendTickets;
