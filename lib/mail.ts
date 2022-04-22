@@ -1,9 +1,12 @@
-import { Attendees } from "@prisma/client";
+import { Attendees, PrismaClient } from "@prisma/client";
 import nodemailer from "nodemailer";
 import handlebars from "handlebars";
 import mailTemplate from "./mailTemplate";
 
-const sendTicket = async (attendee: Attendees) => {
+const prisma = new PrismaClient();
+
+const sendTickets = async (attendees: Attendees[]) => {
+  const startMs = Date.now();
   const template = handlebars.compile(mailTemplate);
 
   const transporter = nodemailer.createTransport({
@@ -17,27 +20,56 @@ const sendTicket = async (attendee: Attendees) => {
       privateKey: process.env.EMAIL_PRIVATE_KEY,
     },
   });
+
   transporter.verify(function (error, success) {
     if (error) {
       return Promise.reject(error);
     }
   });
 
-  const templatedHTML = template({
-    event: "Gjenåpningsfesten",
-    base_url: "billett.abakus.no",
-    id: attendee.id,
-    warning:
-      "NB: før du får opp billetten din må du svare på samtykke til bilder. Gjør gjerne dette før selve eventet starter.",
-  });
+  const sentEmails = [];
+  const failedEmails = [];
 
-  return await transporter.sendMail({
-    from: `A-blokka billettsystem <noreply@abakus.no>`,
-    to: attendee.email,
-    subject: `Billett`,
-    text: `Billetten din til Gjenåpningsfesten finner du på billett.abakus.no/${attendee.id}`,
-    html: templatedHTML,
-  });
+
+  for (const attendee of attendees) {
+    if (Date.now() - startMs > 45000) {
+      transporter.close();
+      return [sentEmails, failedEmails];
+    }
+
+    const templatedHTML = template({
+      event: "Gjenåpningsfesten",
+      base_url: "billett.abakus.no",
+      id: attendee.id,
+      warning:
+        "NB: før du får opp billetten din må du svare på samtykke til bilder. Gjør gjerne dette før selve eventet starter.",
+    });
+
+    const result = await transporter.sendMail({
+      from: `A-blokka billettsystem <noreply@abakus.no>`,
+      to: attendee.email,
+      subject: `Billett til A-Blokka fest: Lørdag`,
+      text: `Billetten din til Gjenåpningsfesten finner du på billett.abakus.no/${attendee.id}`,
+      html: templatedHTML,
+    });
+
+    if ((result.accepted[0] as string).length > 0) {
+      await prisma.attendees.update({
+        where: {
+          id: attendee.id,
+        },
+        data: {
+          email_sent: true,
+        },
+
+      });
+      sentEmails.push(attendee.email);
+    } else {
+      failedEmails.push(attendee.email);
+    }
+  }
+  transporter.close();
+  return [sentEmails, failedEmails];
 };
 
-export default sendTicket;
+export default sendTickets;
