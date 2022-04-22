@@ -5,13 +5,12 @@ import { AttendantType } from "../lib/types";
 import fetcher from "../lib/fetcher";
 
 const sendTickets = async () => {
-  
-    const result = await fetcher(`/api/admin/send_emails`, {
-      method: "POST",
-    });
+  const result = await fetcher(`/api/admin/send_emails`, {
+    method: "POST",
+  });
 
-    console.log(result);
-  }
+  console.log(result);
+};
 
 const MailButton: VFC = () => {
   const { data, error } = useSWR<AttendantType[]>(
@@ -23,14 +22,7 @@ const MailButton: VFC = () => {
     return <Loading />;
   }
 
-  return (
-    <Button
-      onClick={
-        sendTickets}
-    >
-      Send ut billetter
-    </Button>
-  );
+  return <Button onClick={sendTickets}>Send ut billetter</Button>;
 };
 
 export default MailButton;

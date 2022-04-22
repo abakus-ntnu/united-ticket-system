@@ -30,7 +30,6 @@ const sendTickets = async (attendees: Attendees[]) => {
   const sentEmails = [];
   const failedEmails = [];
 
-
   for (const attendee of attendees) {
     if (Date.now() - startMs > 45000) {
       transporter.close();
@@ -61,7 +60,6 @@ const sendTickets = async (attendees: Attendees[]) => {
         data: {
           email_sent: true,
         },
-
       });
       sentEmails.push(attendee.email);
     } else {

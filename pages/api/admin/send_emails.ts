@@ -22,7 +22,6 @@ export default withApiAuthRequired(async (req, res) => {
   let sentEmails, failedEmails;
 
   try {
-
     [sentEmails, failedEmails] = await sendTickets(attendees);
     if (failedEmails.length > 0) {
       return res.send({
@@ -35,8 +34,7 @@ export default withApiAuthRequired(async (req, res) => {
       message: [sentEmails, failedEmails],
       code: 200,
     });
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e);
     return res.send({
       message: [sentEmails, failedEmails],
