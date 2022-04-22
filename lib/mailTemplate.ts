@@ -206,6 +206,7 @@ const mailTemplate = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional/
           <p>Du har nå mottat din digitale billett til {{event}}!</p>
           <a class="btn-primary" style="background-color:#c0392b;border-radius:5px;color:#ffffff;display:inline-block;font-family:'Cabin', Helvetica, Arial, sans-serif;font-size:14px;font-weight:regular;line-height:45px;text-align:center;text-decoration:none;width:155px;-webkit-text-size-adjust:none;mso-hide:all;" href="{{base_url}}/{{id}}" target="_blank"> Vis billett </a>
           <p style="font-size:smaller">{{warning}}</p>
+          <p>{{base_url}}/{{id}}</p>
           <hr>
         </center>
       </td>
